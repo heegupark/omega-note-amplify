@@ -221,7 +221,7 @@ export default function Sidebar(props: SidebarProps) {
           <ListItemIcon>
             <img
               alt="o-logo"
-              src="../../static/images/o-logo.png"
+              src="./images/o-logo.png"
               style={{ width: '22px', height: '22px' }}
             />
           </ListItemIcon>
