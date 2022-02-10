@@ -14,10 +14,10 @@ import NoteRoundedIcon from '@material-ui/icons/NoteRounded';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
-import IMainProps from './interfaces/imainprops';
 import SideBarItem from './sidebar-item';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useDrop } from 'react-dnd';
+import { SidebarProps } from './types';
 
 const drawerWidth = 240;
 
@@ -158,15 +158,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface SidebarProps extends IMainProps {
-  setNotebook: (notebook: string) => void;
-  handleNotebookClick: (notebookId: string) => void;
-  addNewNotebook: (_id: string, title: string) => void;
-  removeNotebook: (notebook: string) => void;
-  setView: (view: string) => void;
-}
-
 export default function Sidebar(props: SidebarProps) {
+  const { addNewNotebook, moveNote, notebook, addNewNote, handleNotebookClick, setView, notebookOrder } = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(true);
   const [addNotebookButton, setAddNotebookButton] = useState<boolean>(false);
@@ -176,14 +169,14 @@ export default function Sidebar(props: SidebarProps) {
     setOpen(!open);
   };
 
-  const addNewNotebook = () => {
+  const addThisNotebook = () => {
     setOpen(true);
     setAddNotebook(true);
   };
 
   const handleAddNewNotebook = (e: KeyboardEvent) => {
     if (e.key === 'Enter' && newNotebook.length > 0) {
-      props.addNewNotebook('', newNotebook);
+      addNewNotebook('', newNotebook);
       setAddNotebook(false);
       setNewNotebook('');
     }
@@ -199,7 +192,7 @@ export default function Sidebar(props: SidebarProps) {
   });
 
   const moveToTrash = () => {
-    props.moveNote(item?.notebook, 'trash', item?.id);
+    moveNote(item?.notebook, 'trash', item?.id);
   };
 
   return (
@@ -232,14 +225,14 @@ export default function Sidebar(props: SidebarProps) {
         <ListItem
           button
           key="add-note"
-          disabled={props.notebook === 'trash'}
+          disabled={notebook === 'trash'}
           className={classes.addNote}
           style={{ width: open ? '85%' : '70%' }}
           onClick={() => {
-            if (props.notebook) {
-              props.addNewNote('', '');
+            if (notebook) {
+              addNewNote('', '');
             } else {
-              addNewNotebook();
+              addThisNotebook();
             }
           }}
         >
@@ -249,7 +242,7 @@ export default function Sidebar(props: SidebarProps) {
             </Tooltip>
           </ListItemIcon>
           <Tooltip title="Click to add a notebook" arrow>
-            {props.notebook ? (
+            {notebook ? (
               <ListItemText primary={open ? 'New Note' : ''} />
             ) : (
               <ListItemText primary={open ? 'New Notebook' : ''} />
@@ -262,7 +255,7 @@ export default function Sidebar(props: SidebarProps) {
           button
           key="Notebooks"
           className={
-            props.notebook === '' ? classes.folderSelected : classes.folder
+            notebook === '' ? classes.folderSelected : classes.folder
           }
           style={{ padding: open ? '0px 10px' : '0px 15px' }}
         >
@@ -270,22 +263,22 @@ export default function Sidebar(props: SidebarProps) {
             <NoteRoundedIcon
               className={open ? classes.icon : classes.iconMinimized}
               onClick={() => {
-                props.handleNotebookClick('');
-                props.setView('notebooks');
+                handleNotebookClick('');
+                setView('notebooks');
               }}
             />
           </ListItemIcon>
           <ListItemText
             primary="Notebooks"
             onClick={() => {
-              props.handleNotebookClick('');
-              props.setView('notebooks');
+              handleNotebookClick('');
+              setView('notebooks');
             }}
           />
           <Tooltip title="Click to add a notebook" arrow>
             <ListItemIcon
               onClick={() => {
-                addNewNotebook();
+                addThisNotebook();
               }}
               onMouseOver={() => setAddNotebookButton(true)}
               onMouseLeave={() => setAddNotebookButton(false)}
@@ -299,8 +292,8 @@ export default function Sidebar(props: SidebarProps) {
           </Tooltip>
         </ListItem>
 
-        {props.notebookOrder.length > 0
-          ? props.notebookOrder.map((notebook: any) => {
+        {notebookOrder.length > 0
+          ? notebookOrder.map((notebook: any) => {
               return (
                 <SideBarItem
                   key={notebook}
@@ -343,9 +336,9 @@ export default function Sidebar(props: SidebarProps) {
           button
           key="Trash"
           className={
-            props.notebook === 'trash' ? classes.folderSelected : classes.folder
+            notebook === 'trash' ? classes.folderSelected : classes.folder
           }
-          onClick={() => props.handleNotebookClick('trash')}
+          onClick={() => handleNotebookClick('trash')}
           style={{
             padding: open ? '0px 10px' : '0px 15px',
             backgroundColor: isOver ? 'rgb(249,56,0)' : '',

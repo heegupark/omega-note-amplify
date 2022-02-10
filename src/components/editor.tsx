@@ -5,9 +5,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
-import INote from './interfaces/inote';
-import INoteProps from './interfaces/inoteprops';
 import Tooltip from '@material-ui/core/Tooltip';
+import { NoteProps, NoteType } from './types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -109,7 +108,7 @@ const formats = [
   // 'video',
 ];
 
-export default function Editor(props: INoteProps) {
+export default function Editor({ notebooks, notebook, currentNoteId, updateNote, moveNote, handleSnackbar, deleteNote }: NoteProps) {
   const [isOpen, setOpen] = useState(false);
   const ReactQuill =
     typeof window === 'object' ? require('react-quill') : () => false;
@@ -148,17 +147,17 @@ export default function Editor(props: INoteProps) {
       noteTitle: undefined,
       note: html,
     };
-    props.updateNote(
-      props.notebooks[props.notebook].id,
-      props.currentNoteId,
+    updateNote(
+      notebooks[notebook].id,
+      currentNoteId,
       newNote
     );
   };
 
   useEffect(() => {
     const getNote = (notebookId: string, noteId: string | undefined) => {
-      const newContents = props.notebooks[notebookId].notes.filter(
-        (note: INote) => note.id === noteId
+      const newContents = notebooks[notebookId].notes.filter(
+        (note: NoteType) => note.id === noteId
       );
       if (newContents.length) {
         setTitle(newContents[0].noteTitle);
@@ -167,8 +166,8 @@ export default function Editor(props: INoteProps) {
         setLastNotebook(newContents[0].lastNotebook);
       }
     };
-    getNote(props.notebook, props.currentNoteId);
-  }, [props.notebook, props.currentNoteId, props.notebooks]);
+    getNote(notebook, currentNoteId);
+  }, [notebook, currentNoteId, notebooks]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -176,25 +175,25 @@ export default function Editor(props: INoteProps) {
       noteTitle: e.target.value,
       note: undefined,
     };
-    props.updateNote(
-      props.notebooks[props.notebook].id,
-      props.currentNoteId,
+    updateNote(
+      notebooks[notebook].id,
+      currentNoteId,
       newNote
     );
   };
 
   const handleMoveToTrash = () => {
-    props.moveNote(props.notebook, 'trash', props.currentNoteId);
+    moveNote(notebook, 'trash', currentNoteId);
     handlePopoverClose();
   };
 
   const handleRestore = () => {
-    props.moveNote('trash', lastNotebook, props.currentNoteId);
+    moveNote('trash', lastNotebook, currentNoteId);
     handlePopoverClose();
   };
 
   const handleDelete = () => {
-    props.deleteNote('trash', props.currentNoteId);
+    deleteNote('trash', currentNoteId);
     handlePopoverClose();
     handleModalClose();
   };
@@ -206,7 +205,7 @@ export default function Editor(props: INoteProps) {
           <span
             className={classes.title}
             onClick={() =>
-              props.handleSnackbar(
+              handleSnackbar(
                 'You can not update a note title in the Trash',
                 'error'
               )
@@ -235,7 +234,7 @@ export default function Editor(props: INoteProps) {
             className={classes.editorInTrash}
             dangerouslySetInnerHTML={{ __html: contents }}
             onClick={() =>
-              props.handleSnackbar(
+              handleSnackbar(
                 'You can not update a note in the Trash',
                 'error'
               )

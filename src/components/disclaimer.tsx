@@ -46,11 +46,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface IndexProps {
+type Props = {
   setIsAcceptDisclaimer: (isAcceptDisclaimer: boolean) => void;
 }
 
-function Disclaimer(props: IndexProps) {
+function Disclaimer({ setIsAcceptDisclaimer }: Props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -60,7 +60,7 @@ function Disclaimer(props: IndexProps) {
 
   const handleAcceptClick = () => {
     localStorage.setItem('omeganoteaccept', 'true');
-    props.setIsAcceptDisclaimer(true);
+    setIsAcceptDisclaimer(true);
     handleClose();
   };
 

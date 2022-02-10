@@ -4,7 +4,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
-import IMainProps from './interfaces/imainprops';
 import RemoveIcon from '@material-ui/icons/Remove';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import Modal from '@material-ui/core/Modal';
@@ -13,6 +12,7 @@ import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import { useDrop } from 'react-dnd';
 import Tooltip from '@material-ui/core/Tooltip';
+import { SidebarItemProps } from './types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -70,14 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface SidebarItemProps extends IMainProps {
-  thisNotebook: string;
-  open: boolean;
-  handleNotebookClick: (notebook: string) => void;
-  removeNotebook: (id: string) => void;
-}
-
-export default function SidebarItem(props: SidebarItemProps) {
+export default function SidebarItem({ removeNotebook, thisNotebook, moveNote, notebook, notebooks, open, handleNotebookClick }: SidebarItemProps) {
   const classes = useStyles();
   const [removeNotebookButton, setRemoveNotebookButton] = useState<boolean>(
     false
@@ -93,22 +86,22 @@ export default function SidebarItem(props: SidebarItemProps) {
   };
 
   const handleDeleteClick = () => {
-    props.removeNotebook(props.thisNotebook);
+    removeNotebook(thisNotebook);
     handleModalClose();
   };
 
   const [{ isOver, item }, drop] = useDrop({
     accept: 'note',
-    drop: () => moveNote(),
+    drop: () => moveThisNote(),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       item: monitor.getItem(),
     }),
   });
 
-  const moveNote = () => {
-    if (item?.notebook !== props.thisNotebook) {
-      props.moveNote(item?.notebook, props.thisNotebook, item?.id);
+  const moveThisNote = () => {
+    if (item?.notebook !== thisNotebook) {
+      moveNote(item?.notebook, thisNotebook, item?.id);
     }
   };
 
@@ -116,18 +109,18 @@ export default function SidebarItem(props: SidebarItemProps) {
     <>
       <ListItem
         button
-        key={props.notebooks[props.thisNotebook].id}
+        key={notebooks[thisNotebook].id}
         className={
-          props.notebook === props.thisNotebook
+          notebook === thisNotebook
             ? classes.listSelected
             : classes.list
         }
         onClick={() => {
           if (!removeNotebookButton)
-            props.handleNotebookClick(props.thisNotebook);
+            handleNotebookClick(thisNotebook);
         }}
         style={{
-          padding: props.open ? '0px 0px 0px 30px' : '0px 15px',
+          padding: open ? '0px 0px 0px 30px' : '0px 15px',
           backgroundColor: isOver ? 'green' : '',
           borderRadius: isOver ? '5px' : '',
         }}
@@ -136,7 +129,7 @@ export default function SidebarItem(props: SidebarItemProps) {
         <ListItemIcon>
           <ImportContactsIcon className={classes.icon} />
         </ListItemIcon>
-        <ListItemText primary={props.notebooks[props.thisNotebook].title} />
+        <ListItemText primary={notebooks[thisNotebook].title} />
         <Tooltip title="Click to delete this notebook" arrow>
           <ListItemIcon
             onClick={() => {
@@ -145,7 +138,7 @@ export default function SidebarItem(props: SidebarItemProps) {
             onMouseOver={() => setRemoveNotebookButton(true)}
             onMouseLeave={() => setRemoveNotebookButton(false)}
           >
-            {removeNotebookButton && props.open ? (
+            {removeNotebookButton && open ? (
               <RemoveIcon className={classes.removeNotebookIcon} />
             ) : (
               <MoreHorizIcon className={classes.menuNotebookIcon} />

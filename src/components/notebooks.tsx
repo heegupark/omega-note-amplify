@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import INotebook from './interfaces/inotebook';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import arraySort from 'array-sort';
+import { NotebooksProps } from './types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,13 +48,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface INotebooksProps {
-  notebooks: INotebook;
-  notebookOrder: Array<string>;
-  handleNotebookClick: (notebook: string) => void;
-}
 
-export default function Notebooks(props: INotebooksProps) {
+export default function Notebooks({ notebooks, notebookOrder, handleNotebookClick }: NotebooksProps) {
   const classes = useStyles();
   const [category, setCategory] = useState<string>('title');
   const [reverse, setReverse] = useState<boolean>(false);
@@ -100,14 +95,14 @@ export default function Notebooks(props: INotebooksProps) {
     return { id, title, displayTitle, noteCount, createdAt, updatedAt };
   };
 
-  const rows = props.notebookOrder.map((notebook: string) => {
+  const rows = notebookOrder.map((notebook: string) => {
     return createData(
-      props.notebooks[notebook].id,
-      props.notebooks[notebook].title.toLowerCase(),
-      props.notebooks[notebook].title,
-      props.notebooks[notebook].notes.length,
-      getTimeMsg(props.notebooks[notebook].createdAt),
-      getTimeMsg(props.notebooks[notebook].updatedAt)
+      notebooks[notebook].id,
+      notebooks[notebook].title.toLowerCase(),
+      notebooks[notebook].title,
+      notebooks[notebook].notes.length,
+      getTimeMsg(notebooks[notebook].createdAt),
+      getTimeMsg(notebooks[notebook].updatedAt)
     );
   });
 
@@ -174,7 +169,7 @@ export default function Notebooks(props: INotebooksProps) {
                   <TableCell
                     component="th"
                     scope="row"
-                    onClick={() => props.handleNotebookClick(row.id)}
+                    onClick={() => handleNotebookClick(row.id)}
                     style={{ cursor: 'pointer' }}
                   >
                     {row.displayTitle}

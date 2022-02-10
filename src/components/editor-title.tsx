@@ -1,7 +1,6 @@
 import { FiBook } from 'react-icons/fi';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import INoteProps from './interfaces/inoteprops';
-import INote from './interfaces/inote';
+import { NoteProps, NoteType } from './types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,11 +37,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function EditorTitle(props: INoteProps) {
+export default function EditorTitle({ notebooks, notebook, currentNoteId, formatDate }: NoteProps) {
   const classes = useStyles();
   let updateAt = new Date();
-  props.notebooks[props.notebook].notes.forEach((note: INote) => {
-    if (note.id === props.currentNoteId) {
+  notebooks[notebook].notes.forEach((note: NoteType) => {
+    if (note.id === currentNoteId) {
       updateAt = note.updatedAt;
     }
   });
@@ -52,13 +51,13 @@ export default function EditorTitle(props: INoteProps) {
         <div>
           <FiBook className={classes.icon} />
           <span className={classes.title}>
-            {props.notebooks[props.notebook].title}
+            {notebooks[notebook].title}
           </span>
         </div>
-        {props.currentNoteId && (
+        {currentNoteId && (
           <span className={classes.date}>
             {'Last edited on '}
-            {props.formatDate(updateAt)}
+            {formatDate(updateAt)}
           </span>
         )}
       </span>

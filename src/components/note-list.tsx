@@ -4,8 +4,7 @@ import { CgNotes } from 'react-icons/cg';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import Divider from '@material-ui/core/Divider';
 import NoteListItem from './note-list-item';
-import INote from './interfaces/inote';
-import INoteProps from './interfaces/inoteprops';
+import { NoteProps, NoteType } from './types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,16 +51,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function NoteList(props: INoteProps) {
+export default function NoteList(props: NoteProps) {
+  const { notebooks, notebook, formatDate, addNewNote } = props;
   const classes = useStyles();
 
   const convertTitle = (title: string, length: number) => {
     return title.length > length ? title.substring(0, length) + '...' : title;
   };
 
-  const noteCount = props.notebooks[props.notebook].notes.length;
-  const notebookTitle = props.notebooks[props.notebook].title;
-  const notebookUpdatedAt = props.notebooks[props.notebook].updatedAt;
+  const noteCount = notebooks[notebook].notes.length;
+  const notebookTitle = notebooks[notebook].title;
+  const notebookUpdatedAt = notebooks[notebook].updatedAt;
 
   return (
     <div className={classes.root}>
@@ -70,13 +70,13 @@ export default function NoteList(props: INoteProps) {
         {`${noteCount} note${noteCount > 1 ? 's' : ''}`}
         <span className={classes.date}>
           {'Last edited on '}
-          {props.formatDate(notebookUpdatedAt)}
+          {formatDate(notebookUpdatedAt)}
         </span>
       </div>
       <Divider />
       {noteCount > 0 ? (
         <div className={classes.listBox}>
-          {props.notebooks[props.notebook].notes.map((note: INote) => {
+          {notebooks[notebook].notes.map((note: NoteType) => {
             return (
               <div key={note.id}>
                 <NoteListItem
@@ -91,7 +91,7 @@ export default function NoteList(props: INoteProps) {
         </div>
       ) : (
         <div className={classes.empty}>
-          {props.notebook === 'trash' ? (
+          {notebook === 'trash' ? (
             <>
               <div className={classes.emptyIcon}>
                 <FaRegTrashAlt />
@@ -107,7 +107,7 @@ export default function NoteList(props: INoteProps) {
               <div>
                 Click the{' '}
                 <span
-                  onClick={() => props.addNewNote('', '')}
+                  onClick={() => addNewNote('', '')}
                   className={classes.newNoteText}
                 >
                   + New Note

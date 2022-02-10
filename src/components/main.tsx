@@ -7,12 +7,10 @@ import { v4 as uuidv4 } from 'uuid';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import Moment from 'react-moment';
-import INote from './interfaces/inote';
-import IUpdateNote from './interfaces/iupdatenote';
-import INotebooks from './interfaces/inotebooks';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Notebooks from './notebooks';
+import { NoteType, UpdateNoteType, NotebooksType } from './types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,7 +32,7 @@ export default function Main() {
   const [severity, setSeverity] = useState<any>('success');
   const [notebook, setNotebook] = useState<string>('notebook-0');
   const [currentNoteId, setCurrentNoteId] = useState<string | undefined>('');
-  const [state, setState] = useState<INotebooks>({
+  const [state, setState] = useState<NotebooksType>({
     notebooks: {
       'notebook-0': {
         id: 'notebook-0',
@@ -124,9 +122,9 @@ export default function Main() {
   const updateNote = (
     notebookId: string,
     noteId: string | undefined,
-    newNote: IUpdateNote
+    newNote: UpdateNoteType
   ) => {
-    state.notebooks[notebookId].notes.forEach((note: INote) => {
+    state.notebooks[notebookId].notes.forEach((note: NoteType) => {
       if (
         note.id === noteId &&
         ((newNote.note && newNote.note !== note.note) ||
@@ -146,7 +144,7 @@ export default function Main() {
 
   const updateDate = (notebookId: string, noteId: string | undefined) => {
     if (noteId) {
-      state.notebooks[notebookId].notes.forEach((note: INote) => {
+      state.notebooks[notebookId].notes.forEach((note: NoteType) => {
         if (note.id === noteId) {
           note.updatedAt = new Date();
         }
@@ -163,8 +161,8 @@ export default function Main() {
     destination: string,
     noteId: string | undefined
   ) => {
-    let tempNote: INote = {} as INote;
-    state.notebooks[origin].notes.forEach((note: INote, index: number) => {
+    let tempNote: NoteType = {} as NoteType;
+    state.notebooks[origin].notes.forEach((note: NoteType, index: number) => {
       if (note.id === noteId) {
         if (destination === 'trash') {
           note.isDeleted = true;
@@ -210,7 +208,7 @@ export default function Main() {
   };
 
   const deleteNote = (notebookId: string, noteId: string | undefined) => {
-    state.notebooks[notebookId].notes.forEach((note: INote, index: number) => {
+    state.notebooks[notebookId].notes.forEach((note: NoteType, index: number) => {
       if (note.id === noteId) {
         state.notebooks[notebookId].notes.splice(index, 1);
       }
@@ -279,8 +277,8 @@ export default function Main() {
 
   const removeNotebook = (id: string) => {
     const title = state.notebooks[id].title;
-    state.notebooks[id].notes.forEach((note: INote) => {
-      let tempNote: INote = {} as INote;
+    state.notebooks[id].notes.forEach((note: NoteType) => {
+      let tempNote: NoteType = {} as NoteType;
       note.isDeleted = true;
       note.lastNotebook = id;
       note.lastNotebookTitle = title;

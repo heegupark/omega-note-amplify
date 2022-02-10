@@ -3,8 +3,8 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import NoteList from './note-list';
 import EditorTitle from './editor-title';
 import Editor from './editor';
-import INoteProps from './interfaces/inoteprops';
 import { CgNotes } from 'react-icons/cg';
+import { NoteProps } from './types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,13 +53,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Note(props: INoteProps) {
+export default function Note(props: NoteProps) {
+  const { notebook, addNewNote, currentNoteId } = props;
   const classes = useStyles();
 
   return (
     <>
       <div className={classes.root}>
-        {props.notebook ? (
+        {notebook ? (
           <div className={classes.box}>
             <NoteList {...props} />
           </div>
@@ -72,7 +73,7 @@ export default function Note(props: INoteProps) {
             <div>
               Click the{' '}
               <span
-                onClick={() => props.addNewNote('', '')}
+                onClick={() => addNewNote('', '')}
                 className={classes.newNoteText}
               >
                 + New Note
@@ -82,7 +83,7 @@ export default function Note(props: INoteProps) {
           </div>
         )}
         <div>
-          {props.notebook && props.currentNoteId && (
+          {notebook && currentNoteId && (
             <>
               <EditorTitle {...props} />
               <Editor {...props} />

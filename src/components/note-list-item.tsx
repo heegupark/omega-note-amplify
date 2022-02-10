@@ -3,8 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { XYCoord, useDrag, useDragLayer, DragSourceMonitor } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { BsBook } from 'react-icons/bs';
-import INote from './interfaces/inote';
-import INoteProps from './interfaces/inoteprops';
+import { NoteListProps } from './types';
 
 const layerStyles: React.CSSProperties = {
   position: 'fixed',
@@ -118,19 +117,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface NoteListProps extends INoteProps {
-  note: INote;
-  convertTitle: (title: string, length: number) => string;
-}
-
-export default function NoteListItem(props: NoteListProps) {
+export default function NoteListItem({ note, notebook, handleSnackbar, currentNoteId, setCurrentNoteId, convertTitle, formatDate }: NoteListProps) {
   const classes = useStyles();
 
   const [{ opacity }, drag, preview] = useDrag({
     item: {
-      id: props.note.id,
-      name: props.note.noteTitle,
-      notebook: props.notebook,
+      id: note.id,
+      name: note.noteTitle,
+      notebook: notebook,
       type: 'note',
     },
     collect: (monitor: DragSourceMonitor) => ({
@@ -190,11 +184,11 @@ export default function NoteListItem(props: NoteListProps) {
       convertedString.length > limit ? '...' : ''
     }`;
   };
-  const isSelected = props.note.id === props.currentNoteId;
+  const isSelected = note.id === currentNoteId;
 
   const handleClickInTrash = () => {
     if (isSelected) {
-      props.handleSnackbar('You can not drag a note to other place', 'error');
+      handleSnackbar('You can not drag a note to other place', 'error');
     }
   };
 
@@ -202,30 +196,30 @@ export default function NoteListItem(props: NoteListProps) {
     <>
       <div
         className={isSelected ? classes.boxSelected : classes.box}
-        onClick={() => props.setCurrentNoteId(props.note.id)}
+        onClick={() => setCurrentNoteId(note.id)}
       >
-        {props.note.isDeleted ? (
+        {note.isDeleted ? (
           <div onClick={handleClickInTrash}>
             <div className={classes.noteTitle}>
-              {props.convertTitle(props.note.noteTitle, 20)}
+              {convertTitle(note.noteTitle, 20)}
             </div>
             <div className={classes.noteContent}>
-              {convertToString(props.note.note)}
+              {convertToString(note.note)}
             </div>
             <div className={classes.date}>
-              {props.formatDate(props.note.updatedAt)}
+              {formatDate(note.updatedAt)}
             </div>
           </div>
         ) : (
           <div ref={drag} style={{ opacity }}>
             <div className={classes.noteTitle}>
-              {props.convertTitle(props.note.noteTitle, 20)}
+              {convertTitle(note.noteTitle, 20)}
             </div>
             <div className={classes.noteContent}>
-              {convertToString(props.note.note)}
+              {convertToString(note.note)}
             </div>
             <div className={classes.date}>
-              {props.formatDate(props.note.updatedAt)}
+              {formatDate(note.updatedAt)}
             </div>
           </div>
         )}
