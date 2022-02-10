@@ -1,0 +1,23 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-omeganoteamplify-dev-201440-authRole",
+            "UnauthRoleArn": "arn:aws:iam::546261418485:role/amplify-omeganoteamplify-dev-201440-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::546261418485:role/amplify-omeganoteamplify-dev-201440-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "amplify-omeganoteamplify-dev-201440-deployment",
+            "UnauthRoleName": "amplify-omeganoteamplify-dev-201440-unauthRole",
+            "StackName": "amplify-omeganoteamplify-dev-201440",
+            "StackId": "arn:aws:cloudformation:us-west-2:546261418485:stack/amplify-omeganoteamplify-dev-201440/f96f2090-8a27-11ec-abdc-022fcd832f8d",
+            "AmplifyAppId": "d14zztnzlz1din"
+        },
+        "categories": {
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d14zztnzlz1din",
+                    "type": "manual"
+                }
+            }
+        }
+    }
+}
