@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, SyntheticEvent } from 'react';
 import Sidebar from './sidebar';
 import Note from './note';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -24,7 +24,7 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function Main() {
+const Main = () => {
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
   const [view, setView] = useState<string>('note');
@@ -112,7 +112,7 @@ export default function Main() {
     });
   };
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleClose = (event?: SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -360,3 +360,5 @@ export default function Main() {
     </div>
   );
 }
+
+export default Main;

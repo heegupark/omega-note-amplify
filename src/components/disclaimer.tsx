@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -50,9 +50,9 @@ type Props = {
   setIsAcceptDisclaimer: (isAcceptDisclaimer: boolean) => void;
 }
 
-function Disclaimer({ setIsAcceptDisclaimer }: Props) {
+const Disclaimer = ({ setIsAcceptDisclaimer }: Props) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
 
   const handleClose = () => {
     setOpen(false);

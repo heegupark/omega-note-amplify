@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent } from 'react';
+import { useState, ChangeEvent, KeyboardEvent } from 'react';
 import clsx from 'clsx';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -158,7 +158,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Sidebar(props: SidebarProps) {
+const Sidebar = (props: SidebarProps) => {
   const { addNewNotebook, moveNote, notebook, addNewNote, handleNotebookClick, setView, notebookOrder } = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(true);
@@ -320,7 +320,7 @@ export default function Sidebar(props: SidebarProps) {
               value={newNotebook}
               placeholder="New Notebook"
               className={classes.newnotebook}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setNewNotebook(e.target.value)
               }
               onKeyDown={(e: KeyboardEvent) => {
@@ -371,3 +371,5 @@ export default function Sidebar(props: SidebarProps) {
     </Drawer>
   );
 }
+
+export default Sidebar;

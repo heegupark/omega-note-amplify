@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent, MouseEvent } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { HiDotsHorizontal } from 'react-icons/hi';
 import Menu from '@material-ui/core/Menu';
@@ -7,6 +7,7 @@ import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import { NoteProps, NoteType } from './types';
+import 'react-quill/dist/quill.snow.css';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,13 +21,8 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '24px',
     },
     editor: {
-      width: '100%',
-      minWidth: '400px',
       wordBreak: 'break-word',
-      paddingBottom: '10px',
-      '&:hover': {
-        backgroundColor: 'white',
-      },
+      height: '88vh',
     },
     editorInTrash: {
       width: '100%',
@@ -41,7 +37,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     dot: {
       cursor: 'pointer',
-      // marginTop: '10px',
       padding: '5px',
       verticalAlign: 'middle',
       '&:hover': {
@@ -108,7 +103,7 @@ const formats = [
   // 'video',
 ];
 
-export default function Editor({ notebooks, notebook, currentNoteId, updateNote, moveNote, handleSnackbar, deleteNote }: NoteProps) {
+const Editor = ({ notebooks, notebook, currentNoteId, updateNote, moveNote, handleSnackbar, deleteNote }: NoteProps) => {
   const [isOpen, setOpen] = useState(false);
   const ReactQuill =
     typeof window === 'object' ? require('react-quill') : () => false;
@@ -117,8 +112,8 @@ export default function Editor({ notebooks, notebook, currentNoteId, updateNote,
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const [contents, setContents] = useState<string>('');
   const [lastNotebook, setLastNotebook] = useState<string>('');
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleModalOpen = () => {
     handlePopoverClose();
@@ -129,7 +124,7 @@ export default function Editor({ notebooks, notebook, currentNoteId, updateNote,
     setModalOpen(false);
   };
 
-  const handlePopoverOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handlePopoverOpen = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -169,7 +164,7 @@ export default function Editor({ notebooks, notebook, currentNoteId, updateNote,
     getNote(notebook, currentNoteId);
   }, [notebook, currentNoteId, notebooks]);
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
     const newNote = {
       noteTitle: e.target.value,
@@ -275,7 +270,7 @@ export default function Editor({ notebooks, notebook, currentNoteId, updateNote,
           <input
             value={title}
             className={classes.title}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleTitleChange(e)
             }
           />
@@ -310,3 +305,5 @@ export default function Editor({ notebooks, notebook, currentNoteId, updateNote,
     </>
   );
 }
+
+export default Editor;

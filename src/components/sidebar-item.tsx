@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -70,12 +70,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SidebarItem({ removeNotebook, thisNotebook, moveNote, notebook, notebooks, open, handleNotebookClick }: SidebarItemProps) {
+const SidebarItem = ({ removeNotebook, thisNotebook, moveNote, notebook, notebooks, open, handleNotebookClick }: SidebarItemProps) => {
   const classes = useStyles();
   const [removeNotebookButton, setRemoveNotebookButton] = useState<boolean>(
     false
   );
-  const [openModal, setOpenModal] = React.useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleModalClose = () => {
     setOpenModal(false);
@@ -182,4 +182,6 @@ export default function SidebarItem({ removeNotebook, thisNotebook, moveNote, no
       </Modal>
     </>
   );
-}
+};
+
+export default SidebarItem;

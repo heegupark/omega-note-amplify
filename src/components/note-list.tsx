@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function NoteList(props: NoteProps) {
+const NoteList = (props: NoteProps) => {
   const { notebooks, notebook, formatDate, addNewNote } = props;
   const classes = useStyles();
 
@@ -120,4 +120,6 @@ export default function NoteList(props: NoteProps) {
       )}
     </div>
   );
-}
+};
+
+export default NoteList;

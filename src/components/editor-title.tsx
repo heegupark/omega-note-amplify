@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function EditorTitle({ notebooks, notebook, currentNoteId, formatDate }: NoteProps) {
+const EditorTitle = ({ notebooks, notebook, currentNoteId, formatDate }: NoteProps) => {
   const classes = useStyles();
   let updateAt = new Date();
   notebooks[notebook].notes.forEach((note: NoteType) => {
@@ -64,3 +64,5 @@ export default function EditorTitle({ notebooks, notebook, currentNoteId, format
     </div>
   );
 }
+
+export default EditorTitle;

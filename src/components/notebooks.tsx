@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-export default function Notebooks({ notebooks, notebookOrder, handleNotebookClick }: NotebooksProps) {
+const Notebooks = ({ notebooks, notebookOrder, handleNotebookClick }: NotebooksProps) => {
   const classes = useStyles();
   const [category, setCategory] = useState<string>('title');
   const [reverse, setReverse] = useState<boolean>(false);
@@ -185,4 +185,6 @@ export default function Notebooks({ notebooks, notebookOrder, handleNotebookClic
       </div>
     </div>
   );
-}
+};
+
+export default Notebooks;

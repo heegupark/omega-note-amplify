@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Note(props: NoteProps) {
+const Note = (props: NoteProps) => {
   const { notebook, addNewNote, currentNoteId } = props;
   const classes = useStyles();
 
@@ -93,4 +93,6 @@ export default function Note(props: NoteProps) {
       </div>
     </>
   );
-}
+};
+
+export default Note;

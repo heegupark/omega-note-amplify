@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import { useEffect, CSSProperties } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { XYCoord, useDrag, useDragLayer, DragSourceMonitor } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { BsBook } from 'react-icons/bs';
 import { NoteListProps } from './types';
 
-const layerStyles: React.CSSProperties = {
+const layerStyles: CSSProperties = {
   position: 'fixed',
   pointerEvents: 'none',
   zIndex: 9999,
@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function NoteListItem({ note, notebook, handleSnackbar, currentNoteId, setCurrentNoteId, convertTitle, formatDate }: NoteListProps) {
+const NoteListItem = ({ note, notebook, handleSnackbar, currentNoteId, setCurrentNoteId, convertTitle, formatDate }: NoteListProps) => {
   const classes = useStyles();
 
   const [{ opacity }, drag, preview] = useDrag({
@@ -241,3 +241,5 @@ export default function NoteListItem({ note, notebook, handleSnackbar, currentNo
     </>
   );
 }
+
+export default NoteListItem;
